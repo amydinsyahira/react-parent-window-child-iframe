@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Main Window</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        padding: 2rem;
+        min-width: 320px;
+        overflow: hidden;
+      }
+      code {
+        color: #00d8fe !important;
+      }
+      .iframe-status {
+        margin: 0 !important;
+      }
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1 id="title" style="margin-bottom: 2rem">
+            Main Window <code>...</code>
+          </h1>
+          <hr style="margin-bottom: 2rem" />
+          <p class="status-message">
+            Waiting for data from iframe window
+            <code>http://localhost:5173</code> and send message for the response
+          </p>
+          <div class="iframe-data alert alert-info" style="display: none">
+            <p class="iframe-status"></p>
+          </div>
+          <div
+            class="embed-responsive embed-responsive-16by9"
+            style="
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              border-radius: 0.25rem;
+              min-height: 400px;
+            "
+          >
+            <iframe
+              id="iframeWindow"
+              class="embed-responsive-item"
+              src="http://localhost:5173"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $("#title").html(`Main Window <code>${window.location.origin}</code>`);
+      // Determine how the browser should listen for messages from other
+      // windows. If `addEventListener` exists, then use that. Otherwise, use
+      // `attachEvent` because an older browser is probably being used. Also,
+      // use a callback to handle messages so that both methods of "message
+      // listening" can be routed to the same function. The callback in this
+      // example is `handleMessage` and it will take one argument (the
+      // `MessageEvent` object).
+      if (window.addEventListener) {
+        window.addEventListener("message", handleMessage);
+      } else {
+        window.attachEvent("onmessage", handleMessage);
+      }
+
+      /**
+       * Handle a message that was sent from some window.
+       *
+       * @param {MessageEvent} event The MessageEvent object holding the message/data.
+       */
+      function handleMessage(event) {
+        // If the window that sent this message is not http://localhost:5173, then
+        // that message needs to be thrown out.
+        if (event.origin != "http://localhost:5173") {
+          console.log(
+            "The message came from some site we don't know. We're not processing it."
+          );
+          return;
+        }
+        console.log("Received a message from " + event.origin + ".");
+
+        // When one window sends a message, or data, to another window via
+        // `parent.postMessage()`, the message (the first argument) in the
+        // `parent.postMessage()` call is accessible via `event.data` here.
+        var dataFromChildIframe = event.data;
+
+        // Log the data to the console.
+        console.log(dataFromChildIframe);
+        // Get iframe element
+        var iframeEl = document.getElementById("iframeWindow");
+        var iframeWindow = iframeEl.contentWindow || iframeEl;
+
+        // Show that the data was received.
+        $(".status-message").text(
+          "Data received! The message response will be sent in 5 seconds."
+        );
+        if (dataFromChildIframe.status === true) {
+          $(".iframe-data .iframe-status").html(
+            "The iframe window is <strong>ready</strong> to receive the messages"
+          );
+        }
+        $(".iframe-data").slideDown(200, function () {
+          setTimeout(function () {
+            $(".iframe-data").slideUp(200);
+            $(".status-message").html(
+              "Waiting for data from iframe window <code>http://localhost:5173</code> and send message for the response"
+            );
+            iframeWindow.postMessage(
+              {
+                href: window.location.href,
+                origin: window.location.origin,
+                pathname: window.location.pathname,
+                search: window.location.search,
+                hash: window.location.hash,
+              },
+              "http://localhost:5173"
+            );
+          }, 5000);
+        });
+      }
+    </script>
+  </body>
+</html>
