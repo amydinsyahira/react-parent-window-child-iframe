@@ -45,7 +45,8 @@
           <hr style="margin-bottom: 2rem" />
           <p class="status-message">
             Waiting for data from iframe window
-            <code>http://localhost:5173</code> and send message for the response
+            <code>https://react-parent-window-child-iframe.vercel.app</code> and
+            send message for the response
           </p>
           <div class="iframe-data alert alert-info" style="display: none">
             <p class="iframe-status"></p>
@@ -61,7 +62,7 @@
             <iframe
               id="iframeWindow"
               class="embed-responsive-item"
-              src="http://localhost:5173"
+              src="https://react-parent-window-child-iframe.vercel.app"
             ></iframe>
           </div>
         </div>
@@ -88,9 +89,11 @@
        * @param {MessageEvent} event The MessageEvent object holding the message/data.
        */
       function handleMessage(event) {
-        // If the window that sent this message is not http://localhost:5173, then
+        // If the window that sent this message is not https://react-parent-window-child-iframe.vercel.app, then
         // that message needs to be thrown out.
-        if (event.origin != "http://localhost:5173") {
+        if (
+          event.origin != "https://react-parent-window-child-iframe.vercel.app"
+        ) {
           console.log(
             "The message came from some site we don't know. We're not processing it."
           );
@@ -122,7 +125,7 @@
           setTimeout(function () {
             $(".iframe-data").slideUp(200);
             $(".status-message").html(
-              "Waiting for data from iframe window <code>http://localhost:5173</code> and send message for the response"
+              "Waiting for data from iframe window <code>https://react-parent-window-child-iframe.vercel.app</code> and send message for the response"
             );
             iframeWindow.postMessage(
               {
@@ -132,7 +135,7 @@
                 search: window.location.search,
                 hash: window.location.hash,
               },
-              "http://localhost:5173"
+              "https://react-parent-window-child-iframe.vercel.app"
             );
           }, 5000);
         });

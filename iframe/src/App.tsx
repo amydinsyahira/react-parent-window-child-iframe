@@ -5,7 +5,7 @@ import "./App.css";
 
 function App() {
   const [message, setMessage] = useState(
-    "Waiting for data from main window http://127.0.0.1:5500"
+    "Waiting for data from main window https://amydinsyahira.github.io/react-parent-window-child-iframe"
   );
 
   useEffect(() => {
@@ -22,13 +22,15 @@ function App() {
   }, []);
 
   const sendMessage = (window: Window) => {
-    console.log("Sending data to Main Window (http://127.0.0.1:5500)");
+    console.log(
+      "Sending data to Main Window (https://amydinsyahira.github.io/react-parent-window-child-iframe)"
+    );
     if (!window || !window.parent) return;
     window.parent.postMessage(
       {
         status: true,
       },
-      "http://127.0.0.1:5500"
+      "https://amydinsyahira.github.io/react-parent-window-child-iframe"
     );
   };
 
