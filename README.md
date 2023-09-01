@@ -5,7 +5,7 @@ Thanks to the original code from [crookse](https://github.com/crookse)
 This repository provides you with the example code to enable cross-domain communication between a parent window with HTML and a child iframe with React.js.
 
 ### DEMO
-https://amydinsyahira.github.io/react-parent-window-child-iframe/
+https://amydinsyahira.github.io/react-parent-window-child-iframe/?ts=1693575815290#Vite+React
 
 ***The idea of the example code is to pass URL data from the main window to the iframe window.***
 
