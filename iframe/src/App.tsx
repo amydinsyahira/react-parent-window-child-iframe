@@ -10,6 +10,14 @@ function App() {
 
   useEffect(() => {
     const handleMainWindowMessage = (ev: MessageEvent<any>) => {
+      // If the window that sent this message is not from https://amydinsyahira.github.io, then
+      // that message needs to be thrown out.
+      if (ev.origin !== "https://amydinsyahira.github.io") {
+        console.log(
+          "The message came from some site we don't know. We're not processing it."
+        );
+        return;
+      }
       console.log(ev);
       setMessage(JSON.stringify(ev.data, undefined, 2));
     };

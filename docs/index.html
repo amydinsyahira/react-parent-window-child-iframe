@@ -88,10 +88,10 @@
        * @param {MessageEvent} event The MessageEvent object holding the message/data.
        */
       function handleMessage(event) {
-        // If the window that sent this message is not https://react-parent-window-child-iframe.vercel.app, then
+        // If the window that sent this message is not from https://react-parent-window-child-iframe.vercel.app, then
         // that message needs to be thrown out.
         if (
-          event.origin != "https://react-parent-window-child-iframe.vercel.app"
+          event.origin !== "https://react-parent-window-child-iframe.vercel.app"
         ) {
           console.log(
             "The message came from some site we don't know. We're not processing it."
